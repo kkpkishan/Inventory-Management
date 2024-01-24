@@ -20,14 +20,31 @@ docker run --net=host --privileged \
            -e ELASTICSEARCH_PASSWORD='<PASSWORD>' \
            -e NETWORK_RANGE='<NETWORK_RANGE_SCAN>' \
            -e PARALLELISM=<NUMBER_OF_PARALLEL_SCANS> \
-           -e VERBOSE=1 \
+           -e VERBOSE=0 \
            -e LOCATION=<inventory-location> \
            inventory:v1
 ```
 - `PARALLELISM`: Set this variable based on your network size and machine capacity. Higher values increase the number of simultaneous nmap scans but require more system resources. For large networks, adjust this value to balance between scan speed and system load.
 
 ---
+```bash
+docker run --net=host --privileged \
+           -e ELASTICSEARCH_HOST='https://192.168.1.100:9200' \
+           -e ELASTICSEARCH_USERNAME='admin' \
+           -e ELASTICSEARCH_PASSWORD='admin123' \
+           -e NETWORK_RANGE='192.168.1.0/24' \
+           -e PARALLELISM=5 \
+           -e VERBOSE=1 \
+           -e LOCATION='main_office' \
+           inventory:v1
+```
 
+In this example:
+- `ELASTICSEARCH_HOST` is set to `https://192.168.1.100:9200`, which is the IP and port where OpenSearch is running.
+- `ELASTICSEARCH_USERNAME` and `ELASTICSEARCH_PASSWORD` are set to `admin` and `admin123` respectively, which are the credentials for OpenSearch.
+- `NETWORK_RANGE` is set to `192.168.1.0/24`, which is the target network range for scanning.
+- `PARALLELISM` is set to `5`, indicating the number of parallel network scans.
+- `LOCATION` is set to `main_office`, representing the physical or logical location of the inventory scan.
 Remember to replace `<IP>`, `<USERNAME>`, `<PASSWORD>`, `<NETWORK_RANGE_SCAN>`, `<NUMBER_OF_PARALLEL_SCANS>`, and `<inventory-location>` with the actual values suited to your environment. This setup is designed to be flexible and scalable according to the size of the network and the resources available on the host machine.
 
 ## Description
