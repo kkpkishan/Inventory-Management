@@ -5,6 +5,7 @@ filebeat.inputs:
       - /var/log/network-scanning.log
     json.keys_under_root: true
     json.add_error_key: true
+    scan_frequency: 2s  # Check for new lines every 2 seconds
 
 output.elasticsearch:
   hosts: ["${ELASTICSEARCH_HOST:https://elasticsearch-node:9200}"]
@@ -12,7 +13,11 @@ output.elasticsearch:
   username: "${ELASTICSEARCH_USERNAME:your_username}"
   password: "${ELASTICSEARCH_PASSWORD:your_password}"
   ssl.verification_mode: "none"  # Only if using self-signed certificates
-
+  # Retry settings
+  backoff.init: 1s
+  backoff.max: 60s
+  bulk_max_size: 50  # Adjust based on your throughput needs
+  
 setup.template:
   name: "inventory-scan"
   pattern: "inventory-scan-*"
@@ -38,7 +43,12 @@ processors:
           to: "device.services"
       ignore_missing: true
 
-
+queue.mem:
+  # Memory queue configuration for buffering
+  events: 4096
+  flush.min_events: 2048
+  flush.timeout: 1s
+  
 # Disable X-Pack monitoring
 xpack.monitoring.enabled: false
 # Disable logging of metrics
