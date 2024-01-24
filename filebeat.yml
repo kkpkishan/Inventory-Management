@@ -1,0 +1,45 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/network-scanning.log
+    json.keys_under_root: true
+    json.add_error_key: true
+
+output.elasticsearch:
+  hosts: ["${ELASTICSEARCH_HOST:https://elasticsearch-node:9200}"]
+  index: "inventory-%{+yyyy.MM.dd}"
+  username: "${ELASTICSEARCH_USERNAME:your_username}"
+  password: "${ELASTICSEARCH_PASSWORD:your_password}"
+  ssl.verification_mode: "none"  # Only if using self-signed certificates
+
+setup.template:
+  name: "inventory-scan"
+  pattern: "inventory-scan-*"
+  enabled: true
+
+processors:
+  # Rename fields for better structure
+  - rename:
+      fields:
+        - from: "ip"
+          to: "device.ip"
+        - from: "mac"
+          to: "device.mac"
+        - from: "device_type"
+          to: "device.device_type"
+        - from: "status"
+          to: "device.status"
+        - from: "location"
+          to: "device.location"
+        - from: "os"
+          to: "device.os"
+        - from: "services"
+          to: "device.services"
+      ignore_missing: true
+
+
+# Disable X-Pack monitoring
+xpack.monitoring.enabled: false
+# Disable logging of metrics
+logging.metrics.enabled: false
