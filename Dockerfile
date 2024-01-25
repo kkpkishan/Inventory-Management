@@ -1,6 +1,6 @@
 FROM alpine:3.19.0
 
-RUN apk add --no-cache bash su-exec libc6-compat curl fping arp-scan nmap && \
+RUN apk add --no-cache bash su-exec libc6-compat curl fping arp-scan nmap sudo && \
     apk add --no-cache -t .build-deps ca-certificates gnupg openssl && \
     apk add --no-cache tini && \
     set -ex && \
@@ -26,7 +26,6 @@ COPY filebeat.yml /usr/share/filebeat/filebeat.yml
 RUN chmod go-w /usr/share/filebeat/filebeat.yml
 COPY network-json.sh /usr/share/filebeat
 RUN chmod 755 /usr/share/filebeat/network-json.sh
-
 WORKDIR /usr/share/filebeat
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/docker-entrypoint"]
 CMD ["-environment", "container"]
