@@ -1,6 +1,6 @@
 FROM alpine:3.19.0
 
-RUN apk add --no-cache bash su-exec libc6-compat curl fping arp-scan nmap sudo && \
+RUN apk add --no-cache bash su-exec libc6-compat curl fping arp-scan nmap nmap-scripts nmap-ncat sudo && \
     apk add --no-cache -t .build-deps ca-certificates gnupg openssl && \
     apk add --no-cache tini && \
     set -ex && \
