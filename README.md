@@ -14,7 +14,7 @@ docker build -t inventory:v1 .
 ## Running the Docker Container
 Run the Docker container on the host machine network with the necessary environment variables:
 ```bash
-docker run --net=host --privileged \
+docker run --net=host  \
            -e ELASTICSEARCH_HOST='https://<IP>:9200' \
            -e ELASTICSEARCH_USERNAME='<USERNAME>' \
            -e ELASTICSEARCH_PASSWORD='<PASSWORD>' \
@@ -30,7 +30,7 @@ docker run --net=host --privileged \
 
 Example run command:
 ```bash
-docker run --net=host --privileged \
+docker run --net=host \
            -e ELASTICSEARCH_HOST='https://192.168.1.100:9200' \
            -e ELASTICSEARCH_USERNAME='admin' \
            -e ELASTICSEARCH_PASSWORD='admin123' \
